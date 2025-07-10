@@ -12,7 +12,6 @@ import { Container } from "react-bootstrap";
 
 function AppContent() {
   const location = useLocation();
-  const isHome = location.pathname === "/";
 
   return (
     <div
