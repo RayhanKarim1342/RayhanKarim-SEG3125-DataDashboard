@@ -18,7 +18,7 @@ const NavigationBar = () => {
     >
       <Container fluid>
         <Navbar.Brand as={Link} to="/" className="mb-0 text-light fw-bold fs-4">
-          Data Dashboard
+          Ottawa Stats Dashboard
         </Navbar.Brand>
       </Container>
     </Navbar>
