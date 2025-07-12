@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { Row, Col, Container, Button } from "react-bootstrap";
@@ -36,13 +36,83 @@ const Dashboard = () => {
   const t = translations[language] || translations.en;
 
   const employmentDataset = [
-    { year: "2020", ottawa: 596700, gatin: 173200 },
-    { year: "2021", ottawa: 616400, gatin: 180500 },
-    { year: "2022", ottawa: 650500, gatin: 192700 },
-    { year: "2023", ottawa: 691300, gatin: 192800 },
-    { year: "2024", ottawa: 704300, gatin: 188700 },
-    { year: "2025", ottawa: 697600, gatin: 187600 },
+    { year: "2020-01", ottawa: 635900, gatin: 182800 },
+    { year: "2020-02", ottawa: 627800, gatin: 181400 },
+    { year: "2020-03", ottawa: 611600, gatin: 179700 },
+    { year: "2020-04", ottawa: 585000, gatin: 169900 },
+    { year: "2020-05", ottawa: 564200, gatin: 161600 },
+    { year: "2020-06", ottawa: 555700, gatin: 159000 },
+    { year: "2020-07", ottawa: 567100, gatin: 164800 },
+    { year: "2020-08", ottawa: 579200, gatin: 168100 },
+    { year: "2020-09", ottawa: 589600, gatin: 168800 },
+    { year: "2020-10", ottawa: 591200, gatin: 170500 },
+    { year: "2020-11", ottawa: 592700, gatin: 172200 },
+    { year: "2020-12", ottawa: 596700, gatin: 173200 },
+    { year: "2021-01", ottawa: 605200, gatin: 172200 },
+    { year: "2021-02", ottawa: 616400, gatin: 173600 },
+    { year: "2021-03", ottawa: 622300, gatin: 175600 },
+    { year: "2021-04", ottawa: 625700, gatin: 177300 },
+    { year: "2021-05", ottawa: 626100, gatin: 177200 },
+    { year: "2021-06", ottawa: 628200, gatin: 177900 },
+    { year: "2021-07", ottawa: 630500, gatin: 180900 },
+    { year: "2021-08", ottawa: 625200, gatin: 183000 },
+    { year: "2021-09", ottawa: 617800, gatin: 183100 },
+    { year: "2021-10", ottawa: 613500, gatin: 182200 },
+    { year: "2021-11", ottawa: 614200, gatin: 181200 },
+    { year: "2021-12", ottawa: 616400, gatin: 180500 },
+    { year: "2022-01", ottawa: 618200, gatin: 180700 },
+    { year: "2022-02", ottawa: 623300, gatin: 184300 },
+    { year: "2022-03", ottawa: 630400, gatin: 188500 },
+    { year: "2022-04", ottawa: 641100, gatin: 193800 },
+    { year: "2022-05", ottawa: 647200, gatin: 194000 },
+    { year: "2022-06", ottawa: 643200, gatin: 193600 },
+    { year: "2022-07", ottawa: 639400, gatin: 191500 },
+    { year: "2022-08", ottawa: 638500, gatin: 191800 },
+    { year: "2022-09", ottawa: 646300, gatin: 191200 },
+    { year: "2022-10", ottawa: 646900, gatin: 190800 },
+    { year: "2022-11", ottawa: 649700, gatin: 192600 },
+    { year: "2022-12", ottawa: 650500, gatin: 192700 },
+    { year: "2023-01", ottawa: 655500, gatin: 191400 },
+    { year: "2023-02", ottawa: 655400, gatin: 188000 },
+    { year: "2023-03", ottawa: 659100, gatin: 187300 },
+    { year: "2023-04", ottawa: 660000, gatin: 189900 },
+    { year: "2023-05", ottawa: 665100, gatin: 191000 },
+    { year: "2023-06", ottawa: 672200, gatin: 191100 },
+    { year: "2023-07", ottawa: 678400, gatin: 189800 },
+    { year: "2023-08", ottawa: 683000, gatin: 190500 },
+    { year: "2023-09", ottawa: 684300, gatin: 192000 },
+    { year: "2023-10", ottawa: 689600, gatin: 193500 },
+    { year: "2023-11", ottawa: 690800, gatin: 194500 },
+    { year: "2023-12", ottawa: 691300, gatin: 192800 },
+    { year: "2024-01", ottawa: 689300, gatin: 194000 },
+    { year: "2024-02", ottawa: 689900, gatin: 195100 },
+    { year: "2024-03", ottawa: 686800, gatin: 196600 },
+    { year: "2024-04", ottawa: 682300, gatin: 194300 },
+    { year: "2024-05", ottawa: 679500, gatin: 191200 },
+    { year: "2024-06", ottawa: 679300, gatin: 189700 },
+    { year: "2024-07", ottawa: 683200, gatin: 188900 },
+    { year: "2024-08", ottawa: 690600, gatin: 188200 },
+    { year: "2024-09", ottawa: 698100, gatin: 187900 },
+    { year: "2024-10", ottawa: 702100, gatin: 188000 },
+    { year: "2024-11", ottawa: 702000, gatin: 188400 },
+    { year: "2024-12", ottawa: 704300, gatin: 188700 },
+    { year: "2025-01", ottawa: 705700, gatin: 188500 },
+    { year: "2025-02", ottawa: 708300, gatin: 188500 },
+    { year: "2025-03", ottawa: 713500, gatin: 187600 },
+    { year: "2025-04", ottawa: 711600, gatin: 187000 },
+    { year: "2025-05", ottawa: 707800, gatin: 186900 },
+    { year: "2025-06", ottawa: 697600, gatin: 187600 },
   ];
+
+  const monthOptions = employmentDataset.map((item) => item.year);
+  const [startDate, setStartDate] = useState(
+    monthOptions[monthOptions.length - 6]
+  );
+  const [endDate, setEndDate] = useState(monthOptions[monthOptions.length - 1]);
+
+  const filteredDataset = employmentDataset.filter(
+    (item) => item.year >= startDate && item.year <= endDate
+  );
 
   const peopleFormatter = (value) => `${value.toLocaleString()} people`;
 
@@ -50,11 +120,10 @@ const Dashboard = () => {
     xAxis: [
       {
         tickLabelInterval: (index) => index % 3 === 0,
-        margin: { right: 200 },
       },
     ],
     height: 400,
-    margin: { left: 0, right: 100 },
+    margin: { left: 0, right: 0 },
   };
 
   return (
@@ -71,6 +140,7 @@ const Dashboard = () => {
             </Button>
           </div>
         </Col>
+
         <Col md={10}>
           <Row
             className="gy-4 rounded-4 border border-secondary shadow-lg ms-0 me-1 pb-3 px-3 mt-2"
@@ -136,8 +206,50 @@ const Dashboard = () => {
               <h5 className="pt-3 px-3 display-6 fs-3 text-white fw-bold pb-3">
                 {t.chartTitle}
               </h5>
+
+              <div className="d-flex gap-3 px-3 pb-2 align-items-center flex-wrap">
+                <div>
+                  <label
+                    htmlFor="start-date"
+                    className="text-white fw-bold me-2"
+                  >
+                    Start:
+                  </label>
+                  <select
+                    id="start-date"
+                    className="form-select w-auto d-inline-block"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  >
+                    {monthOptions.map((date) => (
+                      <option key={date} value={date}>
+                        {date}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="end-date" className="text-white fw-bold me-2">
+                    End:
+                  </label>
+                  <select
+                    id="end-date"
+                    className="form-select w-auto d-inline-block"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  >
+                    {monthOptions.map((date) => (
+                      <option key={date} value={date}>
+                        {date}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               <BarChart
-                dataset={employmentDataset}
+                dataset={filteredDataset}
                 yAxis={[{ scaleType: "band", dataKey: "year", width: 60 }]}
                 series={[
                   {
