@@ -105,3 +105,15 @@ footer {
   stroke: transparent !important;
 }
 
+.MuiChartsTooltip-title {
+  color: #fff !important;
+  font-weight: bold !important;
+  opacity: 1 !important;
+}
+
+.MuiChartsTooltip-root,
+.MuiChartsTooltip-root * {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+

@@ -1,22 +1,7 @@
 import React from "react";
-import { ChartContainer } from "@mui/x-charts/ChartContainer";
-import { BarPlot } from "@mui/x-charts/BarChart";
-import { LineChart } from "@mui/x-charts/LineChart";
+import { LineChart, markElementClasses } from "@mui/x-charts/LineChart";
 import { Row, Col, Container, Button } from "react-bootstrap";
 import Paper from "@mui/material/Paper";
-
-const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
-const xLabels = [
-  "Page A",
-  "Page B",
-  "Page C",
-  "Page D",
-  "Page E",
-  "Page F",
-  "Page G",
-];
-
-const lineData = [100, 200, 150, 300, 250, 400, 350];
 
 const Dashboard = () => {
   return (
@@ -24,8 +9,8 @@ const Dashboard = () => {
       <Row>
         <Col md={2}>
           <div
-            className="sidebar text-white gy-4 rounded-4 border border-dark-subtle shadow-lg p-3 ms-1 mt-2 mb-2"
-            style={{ height: "98%" }}
+            className="sidebar text-white gy-4 rounded-4 border border-secondary shadow-lg p-3 ms-1 mt-2 mb-2"
+            style={{ height: "98%", backgroundColor: "#11171d" }}
           >
             <h2 className="display-6 fw-bold fs-4 mb-5">Ottawa Stats</h2>
             <Button variant="light" className="w-100 mb-3 rounded-pill">
@@ -34,17 +19,23 @@ const Dashboard = () => {
           </div>
         </Col>
         <Col md={10}>
-          <Row className="gy-4 rounded-4 border border-dark-subtle shadow-lg ms-0 me-1 p-3 mt-2">
+          <Row
+            className="gy-4 rounded-4 border border-secondary shadow-lg ms-0 me-1 p-3 mt-2"
+            style={{ backgroundColor: "#11171d" }}
+          >
             <Col md={3}>
-              <Paper variant="outlined" className="p-0 rounded-4">
-                <h5 className="pt-3 px-3">Line Chart Example</h5>
+              <Paper
+                variant="outlined"
+                className="p-0 rounded-4 border border-secondary"
+              >
+                <h5 className="pt-3 px-3 display-6 fs-5 text-white fw-bold">
+                  Employed
+                </h5>
                 <LineChart
                   xAxis={[
                     {
-                      data: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb"],
+                      data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
                       scaleType: "point",
-                      color: "#fff",
-                      tickLabelStyle: { fill: "#000" },
                       axisLine: { stroke: "transparent" },
                       tickLine: { stroke: "transparent" },
                     },
@@ -56,7 +47,7 @@ const Dashboard = () => {
                   ]}
                   series={[
                     {
-                      data: [2, 5.5, 2, 8.5, 1.5, 5],
+                      data: [705700, 708300, 713500, 711600, 707800, 697600],
                     },
                   ]}
                   slotProps={{
@@ -66,15 +57,18 @@ const Dashboard = () => {
               </Paper>
             </Col>
             <Col md={3}>
-              <Paper variant="outlined" className="p-0 rounded-4">
-                <h5 className="pt-3 px-3">Line Chart Example</h5>
+              <Paper
+                variant="outlined"
+                className="p-0 rounded-4 border border-secondary"
+              >
+                <h5 className="pt-3 px-3 display-6 fs-5 text-white fw-bold">
+                  Population
+                </h5>
                 <LineChart
                   xAxis={[
                     {
-                      data: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb"],
+                      data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
                       scaleType: "point",
-                      color: "#fff",
-                      tickLabelStyle: { fill: "#000" },
                       axisLine: { stroke: "transparent" },
                       tickLine: { stroke: "transparent" },
                     },
@@ -86,7 +80,9 @@ const Dashboard = () => {
                   ]}
                   series={[
                     {
-                      data: [2, 5.5, 2, 8.5, 1.5, 5],
+                      data: [
+                        1073300, 1075300, 1077400, 1079500, 1081500, 1083600,
+                      ],
                     },
                   ]}
                   slotProps={{
@@ -96,15 +92,18 @@ const Dashboard = () => {
               </Paper>
             </Col>
             <Col md={3}>
-              <Paper variant="outlined" className="p-0 rounded-4">
-                <h5 className="pt-3 px-3">Line Chart Example</h5>
+              <Paper
+                variant="outlined"
+                className="p-0 rounded-4 border border-secondary"
+              >
+                <h5 className="pt-3 px-3 display-6 fs-5 text-white fw-bold">
+                  Unemployment
+                </h5>
                 <LineChart
                   xAxis={[
                     {
-                      data: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb"],
+                      data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
                       scaleType: "point",
-                      color: "#fff",
-                      tickLabelStyle: { fill: "#000" },
                       axisLine: { stroke: "transparent" },
                       tickLine: { stroke: "transparent" },
                     },
@@ -116,7 +115,7 @@ const Dashboard = () => {
                   ]}
                   series={[
                     {
-                      data: [2, 5.5, 2, 8.5, 1.5, 5],
+                      data: [43100, 41600, 41400, 40900, 42100, 45900],
                     },
                   ]}
                   slotProps={{
@@ -126,15 +125,18 @@ const Dashboard = () => {
               </Paper>
             </Col>
             <Col md={3}>
-              <Paper variant="outlined" className="p-0 rounded-4">
-                <h5 className="pt-3 px-3">Line Chart Example</h5>
+              <Paper
+                variant="outlined"
+                className="p-0 rounded-4 border border-secondary"
+              >
+                <h5 className="pt-3 px-3 display-6 fs-5 text-white fw-bold">
+                  Participation Rate
+                </h5>
                 <LineChart
                   xAxis={[
                     {
-                      data: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb"],
+                      data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
                       scaleType: "point",
-                      color: "#fff",
-                      tickLabelStyle: { fill: "#000" },
                       axisLine: { stroke: "transparent" },
                       tickLine: { stroke: "transparent" },
                     },
@@ -146,7 +148,7 @@ const Dashboard = () => {
                   ]}
                   series={[
                     {
-                      data: [2, 5.5, 2, 8.5, 1.5, 5],
+                      data: [69.8, 69.7, 70.1, 69.7, 69.3, 68.6],
                     },
                   ]}
                   slotProps={{
