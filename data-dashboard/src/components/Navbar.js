@@ -9,7 +9,7 @@ const NavigationBar = () => {
       fixed="top"
       className="px-3"
       style={{
-        backgroundColor: "rgba(17, 23, 29, 0.9)",
+        backgroundColor: "rgba(17, 23, 29, 0.3)",
         backdropFilter: "blur(10px)",
         WebkitBackdropFilter: "blur(10px)",
         borderBottomLeftRadius: "1rem",
