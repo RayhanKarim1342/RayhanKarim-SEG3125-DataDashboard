@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { LanguageProvider } from "./LanguageContext";
 
 const darkTheme = createTheme({
   palette: {
@@ -15,10 +16,8 @@ const darkTheme = createTheme({
 
 function AppContent() {
   return (
-    <div
-      className={`app-wrapper d-flex flex-column min-vh-100 home-background`}
-    >
-      <div className={`flex-grow-1 d-flex flex-column app-content`}>
+    <div className="app-wrapper d-flex flex-column min-vh-100 home-background">
+      <div className="flex-grow-1 d-flex flex-column app-content">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="*" element={<NotFound />} />
@@ -41,9 +40,11 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Router>
-        <AppContent />
-      </Router>
+      <LanguageProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }
