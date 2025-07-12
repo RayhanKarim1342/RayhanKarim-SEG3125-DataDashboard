@@ -1,5 +1,5 @@
 import React from "react";
-import { LineChart, markElementClasses } from "@mui/x-charts/LineChart";
+import { LineChart } from "@mui/x-charts/LineChart";
 import { Row, Col, Container, Button } from "react-bootstrap";
 import Paper from "@mui/material/Paper";
 
