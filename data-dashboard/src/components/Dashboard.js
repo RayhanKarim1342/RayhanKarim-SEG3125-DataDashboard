@@ -7,7 +7,6 @@ import { LanguageContext } from "../LanguageContext";
 import Box from "@mui/material/Box";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 
 const translations = {
