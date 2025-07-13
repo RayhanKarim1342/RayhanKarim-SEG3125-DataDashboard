@@ -594,6 +594,7 @@ const Dashboard = () => {
                     width: 100,
                     position: showYAxisFig3 ? "left" : "none",
                     valueFormatter: standardFormatter,
+                    min: 200000,
                   },
                 ]}
                 grid={{ horizontal: showGridlinesFig3 }}
