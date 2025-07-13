@@ -677,7 +677,7 @@ const Dashboard = () => {
                     valueLabelDisplay="auto"
                     min={0}
                     max={1400000}
-                    step={100000}
+                    step={10000}
                   />
                 </Box>
               </Box>
