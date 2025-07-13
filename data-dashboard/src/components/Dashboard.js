@@ -27,6 +27,7 @@ const translations = {
     from: "From",
     to: "To",
     totalPop: "Total Population",
+    range: "Range",
   },
   fr: {
     title: "Statistiques d'Ottawa",
@@ -45,6 +46,7 @@ const translations = {
     from: "De",
     to: "À",
     totalPop: "Population totale",
+    range: "Plage",
   },
 };
 
@@ -612,7 +614,13 @@ const Dashboard = () => {
                   vertical: showGridlinesFig3,
                 }}
               />
-              <Box display="flex" justifyContent="center" gap={2} mb={2}>
+              <Box
+                display="flex"
+                justifyContent="start"
+                gap={2}
+                mb={2}
+                marginLeft={5}
+              >
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -649,7 +657,20 @@ const Dashboard = () => {
                   }
                   label={language === "fr" ? "Remplir" : "Fill"}
                 />
-                <Box width={300} marginTop={1}>
+
+                <Box flexGrow={1} />
+
+                <Box
+                  width={400}
+                  marginTop={1}
+                  marginRight={5}
+                  display="flex"
+                  justifyContent="flex-end"
+                  className="border border-secondary rounded-pill fw-bold bg-dark shadow pt-2 pe-4 pb-2 ps-3 text-white"
+                >
+                  <p className="mb-0" style={{ marginTop: 2 }}>
+                    {t.range}&nbsp;&nbsp;&nbsp;&nbsp;
+                  </p>
                   <Slider
                     value={yRange}
                     onChange={(_, newValue) => setYRange(newValue)}

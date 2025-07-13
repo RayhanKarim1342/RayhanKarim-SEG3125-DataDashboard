@@ -7,6 +7,7 @@ import { Container } from "react-bootstrap";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { LanguageProvider } from "./LanguageContext";
+import { LanguageContext } from "./LanguageContext";
 
 const darkTheme = createTheme({
   palette: {
@@ -15,6 +16,7 @@ const darkTheme = createTheme({
 });
 
 function AppContent() {
+  const { language } = React.useContext(LanguageContext);
   return (
     <div className="app-wrapper d-flex flex-column min-vh-100 home-background">
       <div className="flex-grow-1 d-flex flex-column app-content">
@@ -35,7 +37,9 @@ function AppContent() {
             href="https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410045901"
             style={{ textDecoration: "underline", color: "inherit" }}
           >
-            Source: StatsCan
+            {language === "fr"
+              ? "Source : Statistique Canada"
+              : "Source: StatsCan"}
           </a>
         </Container>
       </footer>
