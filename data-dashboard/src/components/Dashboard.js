@@ -7,6 +7,8 @@ import { LanguageContext } from "../LanguageContext";
 import Box from "@mui/material/Box";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import Typography from "@mui/material/Typography";
+import Slider from "@mui/material/Slider";
 
 const translations = {
   en: {
@@ -309,6 +311,9 @@ const Dashboard = () => {
   const [showTotal, setShowTotal] = useState(true);
   const [showOttawa, setShowOttawa] = useState(true);
   const [showGatineau, setShowGatineau] = useState(true);
+  const [fillChart, setFillChart] = useState(true);
+
+  const [yRange, setYRange] = useState([0, 1400000]);
 
   const chartSeries = [];
 
@@ -320,6 +325,11 @@ const Dashboard = () => {
   }
   if (showGatineau) {
     chartSeries.push({ data: gatinData, label: "Gatineau", area: true });
+  }
+  if (fillChart !== null && fillChart !== undefined) {
+    chartSeries.forEach((series) => {
+      series.area = Boolean(fillChart);
+    });
   }
 
   return (
@@ -594,17 +604,16 @@ const Dashboard = () => {
                     width: 100,
                     position: showYAxisFig3 ? "left" : "none",
                     valueFormatter: standardFormatter,
-                    min: !showOttawa && !showTotal ? 280000 : 200000,
+                    min: yRange[0],
+                    max: yRange[1],
                   },
                 ]}
-                grid={{ horizontal: showGridlinesFig3 }}
+                grid={{
+                  horizontal: showGridlinesFig3,
+                  vertical: showGridlinesFig3,
+                }}
               />
-              <Box
-                display="flex"
-                justifyContent="center" // 👈 This centers horizontally
-                gap={2}
-                mb={2}
-              >
+              <Box display="flex" justifyContent="center" gap={2} mb={2}>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -632,6 +641,25 @@ const Dashboard = () => {
                   }
                   label="Gatineau"
                 />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={fillChart}
+                      onChange={() => setFillChart((prev) => !prev)}
+                    />
+                  }
+                  label={language === "fr" ? "Remplir" : "Fill"}
+                />
+                <Box width={300} marginTop={1}>
+                  <Slider
+                    value={yRange}
+                    onChange={(_, newValue) => setYRange(newValue)}
+                    valueLabelDisplay="auto"
+                    min={0}
+                    max={1400000}
+                    step={100000}
+                  />
+                </Box>
               </Box>
             </Paper>
             <Form className="d-flex align-items-center flex-wrap mt-4 gap-3">
