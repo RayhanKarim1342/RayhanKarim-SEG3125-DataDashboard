@@ -45,6 +45,10 @@ const Dashboard = () => {
   const [showYAxisFig1, setShowYAxisFig1] = useState(false);
   const [showGridlinesFig1, setShowGridlinesFig1] = useState(false);
 
+  const [showXAxisFig2, setShowXAxisFig2] = useState(true);
+  const [showYAxisFig2, setShowYAxisFig2] = useState(true);
+  const [showGridlinesFig2, setShowGridlinesFig2] = useState(false);
+
   const employmentDataset = [
     { year: "2020-01", ottawa: 635900, gatin: 182800 },
     { year: "2020-02", ottawa: 627800, gatin: 181400 },
@@ -115,13 +119,22 @@ const Dashboard = () => {
   ];
 
   const monthOptions = employmentDataset.map((item) => item.year);
-  const [startDate, setStartDate] = useState(
+  const [startDateFig2, setStartDateFig2] = useState(
     monthOptions[monthOptions.length - 6]
   );
-  const [endDate, setEndDate] = useState(monthOptions[monthOptions.length - 1]);
+  const [endDateFig2, setEndDateFig2] = useState(
+    monthOptions[monthOptions.length - 1]
+  );
 
-  const filteredDataset = employmentDataset.filter(
-    (item) => item.year >= startDate && item.year <= endDate
+  const employmentFilteredDataset = employmentDataset.filter(
+    (item) => item.year >= startDateFig2 && item.year <= endDateFig2
+  );
+
+  const validEndOptionsFig2 = monthOptions.filter(
+    (date) => new Date(date) >= new Date(startDateFig2)
+  );
+  const validStartOptionsFig2 = monthOptions.filter(
+    (date) => new Date(date) <= new Date(endDateFig2)
   );
 
   const peopleFormatter = (value) => `${value.toLocaleString()} people`;
@@ -137,6 +150,7 @@ const Dashboard = () => {
     ],
     height: 400,
     margin: { left: 0, right: 0 },
+    position: showXAxisFig1 ? "bottom" : "none",
   };
 
   return (
@@ -254,8 +268,15 @@ const Dashboard = () => {
               </h5>
 
               <BarChart
-                dataset={filteredDataset}
-                yAxis={[{ scaleType: "band", dataKey: "year", width: 60 }]}
+                dataset={employmentFilteredDataset}
+                yAxis={[
+                  {
+                    scaleType: "band",
+                    dataKey: "year",
+                    width: 60,
+                    position: showYAxisFig2 ? "left" : "none",
+                  },
+                ]}
                 series={[
                   {
                     dataKey: "ottawa",
@@ -274,17 +295,65 @@ const Dashboard = () => {
                 ]}
                 layout="horizontal"
                 {...horizontalChartSetting}
-                sx={{
-                  "& .MuiChartsAxis-tickLabel": {
-                    maxWidth: "none",
-                    textOverflow: "unset",
-                    overflow: "visible",
-                    whiteSpace: "nowrap",
-                    fontSize: "1rem",
-                  },
+                xAxis={[{ position: showXAxisFig2 ? "bottom" : "none" }]}
+                grid={{
+                  vertical: showGridlinesFig2,
                 }}
               />
             </Paper>
+            <Form className="d-flex align-items-center mt-4">
+              <div className="border border-secondary rounded-pill fw-bold bg-dark shadow py-1 px-2 text-white">
+                <Form.Check
+                  type="switch"
+                  label={t.xLabel}
+                  checked={showXAxisFig2}
+                  onChange={(e) => setShowXAxisFig2(e.target.checked)}
+                />
+              </div>
+              <div className="border border-secondary rounded-pill fw-bold bg-dark shadow py-1 px-2 text-white ms-3">
+                <Form.Check
+                  type="switch"
+                  label={t.yLabel}
+                  checked={showYAxisFig2}
+                  onChange={(e) => setShowYAxisFig2(e.target.checked)}
+                />
+              </div>
+              <div className="border border-secondary rounded-pill fw-bold bg-dark shadow py-1 px-2 text-white ms-3">
+                <Form.Check
+                  type="switch"
+                  label={t.gridlines}
+                  checked={showGridlinesFig2}
+                  onChange={(e) => setShowGridlinesFig2(e.target.checked)}
+                />
+              </div>
+              <div className="border border-secondary rounded-pill fw-bold bg-dark shadow py-1 px-2 text-white ms-3">
+                <Form.Group controlId="startDateSelect">
+                  <Form.Select
+                    value={startDateFig2}
+                    onChange={(e) => setStartDateFig2(e.target.value)}
+                  >
+                    {validStartOptionsFig2.map((date) => (
+                      <option key={date} value={date}>
+                        {date}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </div>
+
+              <Form.Group controlId="endDateSelect">
+                <Form.Select
+                  value={endDateFig2}
+                  onChange={(e) => setEndDateFig2(e.target.value)}
+                >
+                  {validEndOptionsFig2.map((date) => (
+                    <option key={date} value={date}>
+                      {date}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Form>
           </Row>
         </Col>
       </Row>
