@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { Row, Col, Container, Button } from "react-bootstrap";
+import { Row, Col, Container, Form } from "react-bootstrap";
 import Paper from "@mui/material/Paper";
 import { LanguageContext } from "../LanguageContext";
 
@@ -16,6 +16,9 @@ const translations = {
     participation: "Participation Rate",
     chartTitle: "Number of Employed People in Ottawa and Gatineau since 2020",
     months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    xLabel: "Show x-axis labels",
+    yLabel: "Show y-axis labels",
+    gridlines: "Show gridlines",
   },
   fr: {
     title: "Statistiques d'Ottawa",
@@ -28,12 +31,19 @@ const translations = {
     chartTitle:
       "Nombre de personnes employées à Ottawa et Gatineau depuis 2020",
     months: ["Janv", "Févr", "Mars", "Avr", "Mai", "Juin"],
+    xLabel: "Afficher les étiquettes de l'axe des x",
+    yLabel: "Afficher les étiquettes de l'axe des y",
+    gridlines: "Afficher les lignes de grille",
   },
 };
 
 const Dashboard = () => {
   const { language } = useContext(LanguageContext);
   const t = translations[language] || translations.en;
+
+  const [showXAxisFig1, setShowXAxisFig1] = useState(true);
+  const [showYAxisFig1, setShowYAxisFig1] = useState(false);
+  const [showGridlinesFig1, setShowGridlinesFig1] = useState(false);
 
   const employmentDataset = [
     { year: "2020-01", ottawa: 635900, gatin: 182800 },
@@ -115,6 +125,9 @@ const Dashboard = () => {
   );
 
   const peopleFormatter = (value) => `${value.toLocaleString()} people`;
+  const thousandFormatter = (value) => `${(value / 1000).toFixed(0)}k`;
+  const millionFormatter = (value) => `${(value / 1000000).toFixed(2)}M`;
+  const percentFormatter = (value) => `${value.toFixed(0)}%`;
 
   const horizontalChartSetting = {
     xAxis: [
@@ -129,19 +142,7 @@ const Dashboard = () => {
   return (
     <Container fluid className="dashboard-container py-4">
       <Row>
-        <Col md={2}>
-          <div
-            className="sidebar text-white gy-4 rounded-4 border border-secondary shadow-lg p-3 ms-1 mt-2 mb-2"
-            style={{ height: "98%", backgroundColor: "#11171d" }}
-          >
-            <h2 className="display-6 fw-bold fs-4 mb-5">{t.title}</h2>
-            <Button variant="light" className="w-100 mb-3 rounded-pill">
-              {t.greeting}
-            </Button>
-          </div>
-        </Col>
-
-        <Col md={10}>
+        <Col md={12}>
           <Row
             className="gy-4 rounded-4 border border-secondary shadow-lg ms-0 me-1 pb-3 px-3 mt-2"
             style={{ backgroundColor: "#11171d" }}
@@ -154,18 +155,26 @@ const Dashboard = () => {
               {
                 label: t.employed,
                 data: [705700, 708300, 713500, 711600, 707800, 697600],
+                formatter: thousandFormatter,
+                yWidth: 40,
               },
               {
                 label: t.population,
                 data: [1073300, 1075300, 1077400, 1079500, 1081500, 1083600],
+                formatter: millionFormatter,
+                yWidth: 50,
               },
               {
                 label: t.unemployed,
                 data: [43100, 41600, 41400, 40900, 42100, 45900],
+                formatter: thousandFormatter,
+                yWidth: 30,
               },
               {
                 label: t.participation,
                 data: [69.8, 69.7, 70.1, 69.7, 69.3, 68.6],
+                formatter: percentFormatter,
+                yWidth: 40,
               },
             ].map((chart, index) => (
               <Col md={3} key={index}>
@@ -183,16 +192,53 @@ const Dashboard = () => {
                         scaleType: "point",
                         axisLine: { stroke: "transparent" },
                         tickLine: { stroke: "transparent" },
+                        position: showXAxisFig1 ? "bottom" : "none",
                       },
                     ]}
-                    yAxis={[{ position: "none" }]}
+                    yAxis={[
+                      {
+                        position: showYAxisFig1 ? "left" : "none",
+                        valueFormatter: chart.formatter,
+                        width: chart.yWidth,
+                      },
+                    ]}
                     series={[{ data: chart.data }]}
                     slotProps={{ legend: { hidden: true } }}
+                    grid={{
+                      vertical: showGridlinesFig1,
+                      horizontal: showGridlinesFig1,
+                    }}
                     layout="horizontal"
                   />
                 </Paper>
               </Col>
             ))}
+            <Form className="d-flex align-items-center mt-4">
+              <div className="border border-secondary rounded-pill fw-bold bg-dark shadow py-1 px-2 text-white">
+                <Form.Check
+                  type="switch"
+                  label={t.xLabel}
+                  checked={showXAxisFig1}
+                  onChange={(e) => setShowXAxisFig1(e.target.checked)}
+                />
+              </div>
+              <div className="border border-secondary rounded-pill fw-bold bg-dark shadow py-1 px-2 text-white ms-3">
+                <Form.Check
+                  type="switch"
+                  label={t.yLabel}
+                  checked={showYAxisFig1}
+                  onChange={(e) => setShowYAxisFig1(e.target.checked)}
+                />
+              </div>
+              <div className="border border-secondary rounded-pill fw-bold bg-dark shadow py-1 px-2 text-white ms-3">
+                <Form.Check
+                  type="switch"
+                  label={t.gridlines}
+                  checked={showGridlinesFig1}
+                  onChange={(e) => setShowGridlinesFig1(e.target.checked)}
+                />
+              </div>
+            </Form>
           </Row>
 
           <Row
@@ -206,47 +252,6 @@ const Dashboard = () => {
               <h5 className="pt-3 px-3 display-6 fs-3 text-white fw-bold pb-3">
                 {t.chartTitle}
               </h5>
-
-              <div className="d-flex gap-3 px-3 pb-2 align-items-center flex-wrap">
-                <div>
-                  <label
-                    htmlFor="start-date"
-                    className="text-white fw-bold me-2"
-                  >
-                    Start:
-                  </label>
-                  <select
-                    id="start-date"
-                    className="form-select w-auto d-inline-block"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                  >
-                    {monthOptions.map((date) => (
-                      <option key={date} value={date}>
-                        {date}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="end-date" className="text-white fw-bold me-2">
-                    End:
-                  </label>
-                  <select
-                    id="end-date"
-                    className="form-select w-auto d-inline-block"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                  >
-                    {monthOptions.map((date) => (
-                      <option key={date} value={date}>
-                        {date}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
 
               <BarChart
                 dataset={filteredDataset}
