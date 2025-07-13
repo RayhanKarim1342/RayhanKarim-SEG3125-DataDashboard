@@ -38,7 +38,7 @@ const translations = {
     chartTitle: "Nombre de personnes employées à Ottawa et Gatineau",
     months: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin"],
     xLabel: "x étiquettes",
-    yLabel: "x étiquettes",
+    yLabel: "y étiquettes",
     gridlines: "quadrillage",
     chartTitle2: "Population en âge de travailler à Ottawa et Gatineau",
     from: "De",
