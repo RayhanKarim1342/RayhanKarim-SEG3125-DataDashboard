@@ -4,6 +4,9 @@ import { BarChart } from "@mui/x-charts/BarChart";
 import { Row, Col, Container, Form } from "react-bootstrap";
 import Paper from "@mui/material/Paper";
 import { LanguageContext } from "../LanguageContext";
+import Box from "@mui/material/Box";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 const translations = {
   en: {
@@ -16,10 +19,13 @@ const translations = {
     participation: "Participation Rate",
     chartTitle: "Number of Employed People in Ottawa and Gatineau",
     months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    xLabel: "Show x-axis labels",
-    yLabel: "Show y-axis labels",
-    gridlines: "Show gridlines",
+    xLabel: "x labels",
+    yLabel: "y labels",
+    gridlines: "gridlines",
     chartTitle2: "Working Age Population in Ottawa and Gatineau",
+    from: "From",
+    to: "To",
+    totalPop: "Total Population",
   },
   fr: {
     title: "Statistiques d'Ottawa",
@@ -30,11 +36,14 @@ const translations = {
     unemployed: "Sans emploi",
     participation: "Taux de participation",
     chartTitle: "Nombre de personnes employées à Ottawa et Gatineau",
-    months: ["Janv", "Févr", "Mars", "Avr", "Mai", "Juin"],
-    xLabel: "Afficher les étiquettes de l'axe des x",
-    yLabel: "Afficher les étiquettes de l'axe des y",
-    gridlines: "Afficher les lignes de grille",
+    months: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin"],
+    xLabel: "x étiquettes",
+    yLabel: "x étiquettes",
+    gridlines: "quadrillage",
     chartTitle2: "Population en âge de travailler à Ottawa et Gatineau",
+    from: "De",
+    to: "À",
+    totalPop: "Population totale",
   },
 };
 
@@ -236,10 +245,55 @@ const Dashboard = () => {
     (date) => new Date(date) <= new Date(endDateFig3)
   );
 
-  const peopleFormatter = (value) => `${value.toLocaleString()} people`;
-  const thousandFormatter = (value) => `${(value / 1000).toFixed(0)}k`;
-  const millionFormatter = (value) => `${(value / 1000000).toFixed(2)}M`;
-  const percentFormatter = (value) => `${value.toFixed(0)}%`;
+  const peopleFormatter = (value) => {
+    const formatter = new Intl.NumberFormat(
+      language === "fr" ? "fr-FR" : "en-US"
+    );
+    return `${formatter.format(value)} ${
+      language === "fr" ? "personnes" : "people"
+    }`;
+  };
+
+  const thousandFormatter = (value) => {
+    const formatted = new Intl.NumberFormat(
+      language === "fr" ? "fr-FR" : "en-US",
+      {
+        maximumFractionDigits: 0,
+      }
+    ).format(value / 1000);
+    return `${formatted}${language === "fr" ? "k" : "k"}`;
+  };
+
+  const millionFormatter = (value) => {
+    const formatted = new Intl.NumberFormat(
+      language === "fr" ? "fr-FR" : "en-US",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }
+    ).format(value / 1_000_000);
+    return `${formatted}${language === "fr" ? "M" : "M"}`;
+  };
+
+  const percentFormatter = (value) => {
+    const formatted = new Intl.NumberFormat(
+      language === "fr" ? "fr-FR" : "en-US",
+      {
+        maximumFractionDigits: 0,
+      }
+    ).format(value);
+    return `${formatted}%`;
+  };
+
+  const standardFormatter = (value) => {
+    const locale = language === "fr" ? "fr-FR" : "en-US";
+
+    return new Intl.NumberFormat(locale, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+      useGrouping: true,
+    }).format(value);
+  };
 
   const horizontalChartSetting = {
     xAxis: [
@@ -247,13 +301,29 @@ const Dashboard = () => {
         tickLabelInterval: (index) => index % 3 === 0,
       },
     ],
-    height: 400,
+    height: 800,
     margin: { left: 0, right: 0 },
     position: showXAxisFig1 ? "bottom" : "none",
   };
 
+  const [showTotal, setShowTotal] = useState(true);
+  const [showOttawa, setShowOttawa] = useState(true);
+  const [showGatineau, setShowGatineau] = useState(true);
+
+  const chartSeries = [];
+
+  if (showTotal) {
+    chartSeries.push({ data: totalData, label: t.totalPop, area: true });
+  }
+  if (showOttawa) {
+    chartSeries.push({ data: ottawaData, label: "Ottawa", area: true });
+  }
+  if (showGatineau) {
+    chartSeries.push({ data: gatinData, label: "Gatineau", area: true });
+  }
+
   return (
-    <Container fluid className="dashboard-container py-4">
+    <Container className="dashboard-container py-2">
       <Row>
         <Col md={12}>
           <Row
@@ -322,6 +392,7 @@ const Dashboard = () => {
                       horizontal: showGridlinesFig1,
                     }}
                     layout="horizontal"
+                    height={200}
                   />
                 </Paper>
               </Col>
@@ -442,7 +513,7 @@ const Dashboard = () => {
                   >
                     <div className="d-flex align-items-center gap-2">
                       <Form.Label className="fw-bold text-white mb-0 text-nowrap">
-                        From
+                        {t.from}
                       </Form.Label>
                       <Form.Select
                         className="bg-dark text-white border-0 fw-bold rounded-pill"
@@ -466,7 +537,7 @@ const Dashboard = () => {
                   >
                     <div className="d-flex align-items-center gap-2">
                       <Form.Label className="fw-bold text-white mb-0 text-nowrap">
-                        To
+                        {t.to}
                       </Form.Label>
                       <Form.Select
                         className="bg-dark text-white border-0 fw-bold rounded-pill"
@@ -506,26 +577,15 @@ const Dashboard = () => {
                   },
                 ]}
                 series={[
-                  {
-                    data: totalData,
-                    label: "Total Population",
-                    area: true,
-                  },
-                  {
-                    data: ottawaData,
-                    label: "Ottawa",
-                    area: true,
-                  },
-                  {
-                    data: gatinData,
-                    label: "Gatineau",
-                    area: true,
-                  },
+                  ...chartSeries.map((series) => ({
+                    ...series,
+                    valueFormatter: series.valueFormatter || standardFormatter,
+                  })),
                 ]}
-                height={600}
+                height={800}
                 margin={{
                   top: 20,
-                  bottom: 60,
+                  bottom: 10,
                   left: showYAxisFig3 ? 0 : 50,
                   right: 50,
                 }}
@@ -533,12 +593,45 @@ const Dashboard = () => {
                   {
                     width: 100,
                     position: showYAxisFig3 ? "left" : "none",
+                    valueFormatter: standardFormatter,
                   },
                 ]}
-                grid={{
-                  horizontal: showGridlinesFig3,
-                }}
+                grid={{ horizontal: showGridlinesFig3 }}
               />
+              <Box
+                display="flex"
+                justifyContent="center" // 👈 This centers horizontally
+                gap={2}
+                mb={2}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={showTotal}
+                      onChange={() => setShowTotal((prev) => !prev)}
+                    />
+                  }
+                  label={t.totalPop}
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={showOttawa}
+                      onChange={() => setShowOttawa((prev) => !prev)}
+                    />
+                  }
+                  label="Ottawa"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={showGatineau}
+                      onChange={() => setShowGatineau((prev) => !prev)}
+                    />
+                  }
+                  label="Gatineau"
+                />
+              </Box>
             </Paper>
             <Form className="d-flex align-items-center flex-wrap mt-4 gap-3">
               <div className="border border-secondary rounded-pill fw-bold bg-dark shadow py-1 px-3 text-white">
@@ -576,7 +669,7 @@ const Dashboard = () => {
                   >
                     <div className="d-flex align-items-center gap-2">
                       <Form.Label className="fw-bold text-white mb-0 text-nowrap">
-                        From
+                        {t.from}
                       </Form.Label>
                       <Form.Select
                         className="bg-dark text-white border-0 fw-bold rounded-pill"
@@ -600,7 +693,7 @@ const Dashboard = () => {
                   >
                     <div className="d-flex align-items-center gap-2">
                       <Form.Label className="fw-bold text-white mb-0 text-nowrap">
-                        To
+                        {t.to}
                       </Form.Label>
                       <Form.Select
                         className="bg-dark text-white border-0 fw-bold rounded-pill"

@@ -30,6 +30,13 @@ function AppContent() {
         <Container className="text-center m-0 p-0">
           Rayhan Karim &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; akari033@uottawa.ca
           &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 300377828
+          &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;🍁&nbsp;
+          <a
+            href="https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410045901"
+            style={{ textDecoration: "underline", color: "inherit" }}
+          >
+            Source: StatsCan
+          </a>
         </Container>
       </footer>
     </div>

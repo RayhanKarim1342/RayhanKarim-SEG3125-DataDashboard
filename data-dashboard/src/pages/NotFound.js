@@ -14,7 +14,7 @@ const NotFound = () => {
       }}
     >
       <div className="d-flex flex-column align-items-center">
-        <h1 className="m-3 display-6 fw-bold text-center">
+        <h1 className="m-3 display-6 fw-bold text-center text-dark">
           404! Looks Like You're Lost 😢
         </h1>
         <Button
